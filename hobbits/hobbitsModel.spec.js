@@ -32,5 +32,15 @@ describe('hobbits model', () => {
     hobbit = await Hobbits.insert({ name: 'sam' });
     expect(hobbit.name).toBe('sam');
   });;
+  })
+  describe("remove()", () => {
+      it("should remove a hobbit by id from db", async () => {
+          await Hobbits.insert({ name:"test1"});
+          await Hobbits.insert({ name:"test2"});
+          await Hobbits.insert({ name:"test3"});
+          await Hobbits.remove(3)
+          const hobbits = await db("hobbits");
+        expect(hobbits).toHaveLength(2);
+      })
   });
 });

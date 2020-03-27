@@ -1,6 +1,7 @@
 const request = require("supertest");
-
+const db = require("../data/dbConfig.js")
 const server = require("./server.js");
+const testHobbit = {name: "Shana"};
 
 describe("server.js", function() {
   describe("GET /", function() {
@@ -32,6 +33,41 @@ describe("server.js", function() {
         .then(res => {
           expect(res.body.api).toBe("up");
         });
+    });
+  });
+  describe("POST /", function() {
+    it("it shoud return status code 201", async function() {
+      await db("hobbits").truncate();
+      request(server)
+        .post("/hobbits")
+        .send(testHobbit)
+        .expect(201);
+    });
+    it("it shoud return JSON", async function() {
+      await db("hobbits").truncate();
+      request(server)
+        .post("/hobbits")
+        .send(testHobbit)
+        .then(req => {
+          expect(req.body).toMatch(/json/i)
+        })
+    });
+  });
+  describe("DELETE /", function() {
+    it("should return a status code of 200", async function() {
+      await db("hobbits")
+      request(server)
+        .delete("/hobbits/:id")
+        .send({ id: 1 })
+        .expect(200)
+    });
+    it("it shoud return JSON", async function() {
+      await db("hobbits")
+      request(server)
+        .delete("/hobbits/:id")
+        .then(res => {
+          expect(res.body).toMatch(/json/i)
+        })
     });
   });
 });

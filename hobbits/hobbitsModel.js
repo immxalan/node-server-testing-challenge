@@ -22,7 +22,9 @@ async function update(id, changes) {
 }
 
 function remove(id) {
-  return null;
+ return db("hobbits")
+ .where("id", Number(id))
+ .del();
 }
 
 function getAll() {
